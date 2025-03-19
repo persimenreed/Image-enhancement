@@ -1,0 +1,1 @@
+# New edge directed interpolation (NEDI)
