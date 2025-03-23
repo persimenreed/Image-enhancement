@@ -12,24 +12,21 @@ Template used as baseline for this implementation: https://github.com/Kirstihly/
 
 def compute_cov_weights(C, y):
     """
-    Computes interpolation weights using covariance-based method (R_xx^-1 * r_xy).
+    Computes interpolation weights using np.cov (R_xx^-1 * r_xy).
     """
-    # Center data
-    C_mean = np.mean(C, axis=0, keepdims=True)
-    y_mean = np.mean(y)
+    combined = np.hstack([C, y])
+    
+    # Covariance matrix
+    cov_matrix = np.cov(combined, rowvar=False)
+    
+    # Extracting R_xx and r_xy
+    R_xx = cov_matrix[:-1, :-1]
+    r_xy = cov_matrix[:-1, -1]
 
-    C_centered = C - C_mean
-    y_centered = y - y_mean
-
-    # Compute covariance matrices
-    R_xx = C_centered.T @ C_centered
-    r_xy = C_centered.T @ y_centered
-
-    # Regularize in case R_xx is singular
+    # Regularize R_xx
     epsilon = 1e-5
     R_xx += np.eye(R_xx.shape[0]) * epsilon
 
-    # Solve for a
     a = np.linalg.solve(R_xx, r_xy)
     return a
 
