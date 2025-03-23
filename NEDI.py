@@ -90,10 +90,10 @@ def NEDI_upscale(img, m):
             ], dtype=np.float64)
             upscaled[2 * i, 2 * j + 1] = float(neighbors_v.dot(a).item())
 
-    # after NEDI has finished, remaining zero-valued pixels are estimated using bilinear interpolation.
+    # after NEDI has finished, remaining zero-valued pixels are estimated using bicubic interpolation.
     upscaled = np.clip(upscaled, 0, 255)
-    bilinear = cv2.resize(img, dsize=(w * 2, h * 2), interpolation=cv2.INTER_LINEAR)
-    upscaled[upscaled == 0] = bilinear[upscaled == 0]
+    bicubic = cv2.resize(img, dsize=(w * 2, h * 2), interpolation=cv2.INTER_CUBIC)
+    upscaled[upscaled == 0] = bicubic[upscaled == 0]
     
     return upscaled.astype(img.dtype)
 
@@ -112,7 +112,7 @@ def NEDI_predict(img, m, scale):
         linear_factor = scale / (2 ** num_iterations)
         if linear_factor != 1:
             channel = cv2.resize(channel, dsize=(int(current_w*linear_factor), int(current_h*linear_factor)),
-                                   interpolation=cv2.INTER_LINEAR).astype(output_type)
+                                   interpolation=cv2.INTER_CUBIC).astype(output_type)
         channels.append(channel)
     res_arr = np.stack(channels, axis=2)
     res_arr = np.clip(res_arr, 0, 255).astype(np.uint8)

@@ -18,3 +18,7 @@ Thumbs.db
 # Ignore logs and temporary files
 *.log
 *.tmp
+
+# Folders
+result/
+data/LR/

@@ -18,9 +18,6 @@ def imresize_nn(im, width, height, img_obj=True):
         else:
             im_res = np.zeros((height, width, im.shape[2]))
 
-        # Match up coordinates using (x_res, y_res) -> (x_im, y_im), i.e.,
-        # a_x * x_res + b_x = x_im
-        # a_y * y_res + b_y = y_im
         a_x = ((im.shape[1] - 0.5) - (-0.5)) / ((im_res.shape[1] - 0.5) - (-0.5))
         b_x = (-0.5) - a_x * (-0.5)
         a_y = ((im.shape[0] - 0.5) - (-0.5)) / ((im_res.shape[0] - 0.5) - (-0.5))

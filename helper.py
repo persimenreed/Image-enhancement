@@ -1,6 +1,7 @@
-import cv2
 from PIL import Image
 import numpy as np
+from skimage.metrics import structural_similarity as ssim
+from math import log10, sqrt
 
 def np2img(im, norm=False, rgb_mode=False):
     """
@@ -25,15 +26,23 @@ def np2img(im, norm=False, rgb_mode=False):
 
     return im
 
-def downsampling(img, factor):
-    large_img = cv2.imread(img)
-    large_img = cv2.cvtColor(large_img, cv2.COLOR_BGR2RGB)
-    small_img = cv2.resize(large_img,
-                           (0,0),
-                           fx = factor,
-                           fy = factor,
-                           interpolation = cv2.INTER_NEAREST)
-    
-    small_img = np2img(small_img)
+def downsampling(image_path, factor):
+    img = Image.open(image_path)
+    new_size = (int(img.width * factor), int(img.height * factor))
+    return img.resize(new_size, Image.BICUBIC)
 
-    return small_img
+# https://www.geeksforgeeks.org/python-peak-signal-to-noise-ratio-psnr/
+def PSNR(original, compressed): 
+    mse = np.mean((original - compressed) ** 2) 
+    if(mse == 0):
+        return 100
+    max_pixel = 255.0
+    psnr = 20 * log10(max_pixel / sqrt(mse)) 
+    return psnr 
+
+def SSIM(original, compressed):
+    if original.ndim == 3:
+        original = np.dot(original[..., :3], [0.2989, 0.5870, 0.1140])
+    if compressed.ndim == 3:
+        compressed = np.dot(compressed[..., :3], [0.2989, 0.5870, 0.1140])
+    return ssim(original, compressed, data_range=compressed.max() - compressed.min())
