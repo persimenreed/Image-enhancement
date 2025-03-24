@@ -10,3 +10,5 @@ The following image enhancement techniques are implemented:
 
 The SSIM deviation from mean per image can be seen here:
 ![SSIM Deviation](SSIM_mean_deviation.png)
+
+<pre> ## Installation Install the required Python packages using: ```bash pip install -r requirements.txt ``` </pre>

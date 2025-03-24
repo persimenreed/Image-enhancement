@@ -1,1 +1,8 @@
-pip install opencv-python torch torchvision
+numpy
+Pillow
+opencv-python
+matplotlib
+scikit-image
+torch
+torchvision
+ipython
