@@ -9,4 +9,4 @@ The following image enhancement techniques are implemented:
   - Super-Resolution Convolutional Neural Network
 
 The SSIM deviation from mean per image can be seen here:
-![SSIM Deviation](result/SSIM_mean_deviation.png)
+![SSIM Deviation](SSIM_mean_deviation.png)
